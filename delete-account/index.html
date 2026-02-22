@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Remoção de Conta – MeuInstrutorOnline</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  max-width:700px;
+  margin:40px auto;
+  padding:20px;
+  line-height:1.6;
+}
+.card{
+  border:1px solid #ddd;
+  padding:20px;
+  border-radius:12px;
+}
+button{
+  background:#d32f2f;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:8px;
+  cursor:pointer;
+}
+input{
+  padding:10px;
+  width:100%;
+  margin:10px 0;
+}
+.success{color:green;}
+</style>
+</head>
+
+<body>
+
+<h1>Remova sua conta do MeuInstrutorOnline</h1>
+
+<p>
+You can request permanent deletion of your personal data associated with the MeuInstrutorOnline app.
+</p>
+
+<div class="card">
+
+<form id="deleteForm">
+<label>Email usado no aplicativo</label>
+<input type="email" id="email" required placeholder="seu@email.com"/>
+<button type="submit">Requisição remoção de conta</button>
+</form>
+
+<p id="msg"></p>
+
+</div>
+
+<h2>O que será deletado</h2>
+<ul>
+<li>Informação de Perfil</li>
+<li>Pedidos e histórico de lissões</li>
+<li>Notificações</li>
+<li>Conta de autenticação</li>
+</ul>
+
+<h2>O que será mantido</h2>
+<ul>
+<li>Logs de transações financeiras (legal obligation)</li>
+</ul>
+
+<p>A remoção da conta ocorrerá dentro de 7 dias após a verificação.</p>
+
+<script>
+document.getElementById('deleteForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const msg = document.getElementById('msg');
+  msg.innerText = "Enviando pedido...";
+
+  try {
+    const res = await fetch("https://ubimcmuncvnynwbreznn.supabase.co/functions/v1/request-account-deletion", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email})
+    });
+
+    msg.className="success";
+    msg.innerText="Pedido recebido. Se este e-mail existir, o processo de remoção começará.";
+  } catch(e){
+    msg.innerText="Erro ao enviar o pedido. Tente novamente.";
+  }
+}
+</script>
+
+</body>
+</html>
